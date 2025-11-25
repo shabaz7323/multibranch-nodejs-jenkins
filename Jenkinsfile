@@ -2,6 +2,7 @@ pipeline {
     agent any
 
     stages {
+
         stage('Checkout') {
             steps {
                 checkout scm
@@ -23,17 +24,26 @@ pipeline {
 
         stage('Build App') {
             steps {
-                bat 'npm run build || echo No build script found'
+                script {
+                    // Run npm build but don't fail pipeline if missing
+                    def status = bat(script: 'npm run build', returnStatus: true)
+
+                    if (status != 0) {
+                        echo "⚠️ No build script found — continuing (exit code: ${status})"
+                    } else {
+                        echo "✅ Build completed successfully"
+                    }
+                }
             }
         }
     }
 
     post {
         success {
-            echo "Build completed successfully"
+            echo "🎉 Pipeline succeeded!"
         }
         failure {
-            echo "Build failed!"
+            echo "❌ Pipeline failed!"
         }
     }
 }
