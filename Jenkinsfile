@@ -11,29 +11,29 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                sh 'npm ci'
+                bat 'npm ci'
             }
         }
 
         stage('Run Tests') {
             steps {
-                sh 'npm test'
+                bat 'npm test'
             }
         }
 
         stage('Build App') {
             steps {
-                sh 'npm run build || echo "No build script defined"'
+                bat 'npm run build || echo No build script found'
             }
         }
     }
 
     post {
         success {
-            echo "Build completed successfully on branch ${env.BRANCH_NAME}"
+            echo "Build completed successfully"
         }
         failure {
-            echo "Build FAILED on branch ${env.BRANCH_NAME}"
+            echo "Build failed!"
         }
     }
 }
