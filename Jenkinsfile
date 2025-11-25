@@ -2,7 +2,6 @@ pipeline {
     agent any
 
     stages {
-
         stage('Checkout') {
             steps {
                 checkout scm
@@ -16,23 +15,9 @@ pipeline {
             }
         }
 
-        stage('Lint (Optional)') {
-            when {
-                branch 'main'
-            }
-            steps {
-                sh 'npm run lint || true'
-            }
-        }
-
         stage('Run Tests') {
             steps {
                 sh 'npm test'
-            }
-            post {
-                always {
-                    junit '**/test-results/**/*.xml' // if using Jest junit
-                }
             }
         }
 
@@ -52,4 +37,3 @@ pipeline {
         }
     }
 }
-
